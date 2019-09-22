@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zzd.dao.TVideoMapper" >
+  <resultMap id="BaseResultMap" type="com.zzd.model.TVideo" >
+    <id column="id" property="id" jdbcType="CHAR" />
+    <result column="video_title" property="videoTitle" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="CHAR" />
+    <result column="video_type" property="videoType" jdbcType="VARCHAR" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+    <result column="video_description" property="videoDescription" jdbcType="VARCHAR" />
+    <result column="video_clicks" property="videoClicks" jdbcType="INTEGER" />
+    <result column="video_praises" property="videoPraises" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="created_datetime" property="createdDatetime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="updated_datetime" property="updatedDatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, video_title, user_id, video_type, video_url, cover_url, video_description, video_clicks, 
+    video_praises, status, create_by, created_datetime, update_by, updated_datetime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zzd.model.TVideoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_video
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_video
+    where id = #{id,jdbcType=CHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_video
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zzd.model.TVideoExample" >
+    delete from t_video
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zzd.model.TVideo" >
+    insert into t_video (id, video_title, user_id, 
+      video_type, video_url, cover_url, 
+      video_description, video_clicks, video_praises, 
+      status, create_by, created_datetime, 
+      update_by, updated_datetime)
+    values (#{id,jdbcType=CHAR}, #{videoTitle,jdbcType=VARCHAR}, #{userId,jdbcType=CHAR}, 
+      #{videoType,jdbcType=VARCHAR}, #{videoUrl,jdbcType=VARCHAR}, #{coverUrl,jdbcType=VARCHAR}, 
+      #{videoDescription,jdbcType=VARCHAR}, #{videoClicks,jdbcType=INTEGER}, #{videoPraises,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT}, #{createBy,jdbcType=VARCHAR}, #{createdDatetime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{updatedDatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzd.model.TVideo" >
+    insert into t_video
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="videoTitle != null" >
+        video_title,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="videoType != null" >
+        video_type,
+      </if>
+      <if test="videoUrl != null" >
+        video_url,
+      </if>
+      <if test="coverUrl != null" >
+        cover_url,
+      </if>
+      <if test="videoDescription != null" >
+        video_description,
+      </if>
+      <if test="videoClicks != null" >
+        video_clicks,
+      </if>
+      <if test="videoPraises != null" >
+        video_praises,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createdDatetime != null" >
+        created_datetime,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updatedDatetime != null" >
+        updated_datetime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="videoTitle != null" >
+        #{videoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=CHAR},
+      </if>
+      <if test="videoType != null" >
+        #{videoType,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="coverUrl != null" >
+        #{coverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoDescription != null" >
+        #{videoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="videoClicks != null" >
+        #{videoClicks,jdbcType=INTEGER},
+      </if>
+      <if test="videoPraises != null" >
+        #{videoPraises,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDatetime != null" >
+        #{createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDatetime != null" >
+        #{updatedDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zzd.model.TVideoExample" resultType="java.lang.Integer" >
+    select count(*) from t_video
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_video
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=CHAR},
+      </if>
+      <if test="record.videoTitle != null" >
+        video_title = #{record.videoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=CHAR},
+      </if>
+      <if test="record.videoType != null" >
+        video_type = #{record.videoType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.videoUrl != null" >
+        video_url = #{record.videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coverUrl != null" >
+        cover_url = #{record.coverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.videoDescription != null" >
+        video_description = #{record.videoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.videoClicks != null" >
+        video_clicks = #{record.videoClicks,jdbcType=INTEGER},
+      </if>
+      <if test="record.videoPraises != null" >
+        video_praises = #{record.videoPraises,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdDatetime != null" >
+        created_datetime = #{record.createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatedDatetime != null" >
+        updated_datetime = #{record.updatedDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_video
+    set id = #{record.id,jdbcType=CHAR},
+      video_title = #{record.videoTitle,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=CHAR},
+      video_type = #{record.videoType,jdbcType=VARCHAR},
+      video_url = #{record.videoUrl,jdbcType=VARCHAR},
+      cover_url = #{record.coverUrl,jdbcType=VARCHAR},
+      video_description = #{record.videoDescription,jdbcType=VARCHAR},
+      video_clicks = #{record.videoClicks,jdbcType=INTEGER},
+      video_praises = #{record.videoPraises,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=TINYINT},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      created_datetime = #{record.createdDatetime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      updated_datetime = #{record.updatedDatetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzd.model.TVideo" >
+    update t_video
+    <set >
+      <if test="videoTitle != null" >
+        video_title = #{videoTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=CHAR},
+      </if>
+      <if test="videoType != null" >
+        video_type = #{videoType,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="coverUrl != null" >
+        cover_url = #{coverUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoDescription != null" >
+        video_description = #{videoDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="videoClicks != null" >
+        video_clicks = #{videoClicks,jdbcType=INTEGER},
+      </if>
+      <if test="videoPraises != null" >
+        video_praises = #{videoPraises,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDatetime != null" >
+        created_datetime = #{createdDatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDatetime != null" >
+        updated_datetime = #{updatedDatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=CHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzd.model.TVideo" >
+    update t_video
+    set video_title = #{videoTitle,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=CHAR},
+      video_type = #{videoType,jdbcType=VARCHAR},
+      video_url = #{videoUrl,jdbcType=VARCHAR},
+      cover_url = #{coverUrl,jdbcType=VARCHAR},
+      video_description = #{videoDescription,jdbcType=VARCHAR},
+      video_clicks = #{videoClicks,jdbcType=INTEGER},
+      video_praises = #{videoPraises,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      created_datetime = #{createdDatetime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      updated_datetime = #{updatedDatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+</mapper>
