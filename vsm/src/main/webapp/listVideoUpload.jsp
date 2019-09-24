@@ -119,36 +119,34 @@
     </div>
     <div class="mainContent">
         <div class="box_t">
-            <span class="name">人员列表</span>
+            <span class="name">上传记录列表</span>
         </div>
         <div class="space_hx">&nbsp;</div>
         <!--列表-->
         <table cellpadding="0" cellspacing="0" class="list_hy">
             <tr>
-                <th scope="col">用户名</th>
-                <th scope="col">联系电话</th>
-                <th scope="col">个人邮箱</th>
-                <th scope="col">状态</th>
+                <th scope="col">上传人id</th>
+                <th scope="col">视频标题</th>
+                <th scope="col">视频类型</th>
+                <th scope="col">视频描述</th>
+                <th scope="col">视频状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${admins}" var="admin">
+            <c:forEach items="${uploadRecords}" var="uploadRecord">
                 <tr>
-                    <td>${admin.adminName}</td>
-                    <td>${admin.adminPhone}</td>
-                    <td>${admin.adminMail}</td>
-                    <td>${admin.status}</td>
+                    <td>${uploadRecord.userId}</td>
+                    <td>${uploadRecord.uploadTitle}</td>
+                    <td>${uploadRecord.uploadType}</td>
+                    <td>${uploadRecord.uploadDescription}</td>
+                    <td>${uploadRecord.status}</td>
                     <td>
-                        <a href="/blockadeAdmin?name=${admin.adminName}" class="btn">封锁</a>
-                        <a href="/UnsealAdmin?name=${admin.adminName}" class="btn">解封</a>
+                        <a href="/detailUpload?id=${uploadRecord.id}" class="btn">详情</a>
+                        <a href="/agreeUpload?id=${uploadRecord.id}" class="btn">同意</a>
+                        <a href="/rejectUpload?id=${uploadRecord.id}" class="btn">拒接</a>
                     </td>
                 </tr>
             </c:forEach>
         </table>
-        <div class="r_foot">
-            <div class="r_foot_m">
-                <a href="addAdmin.jsp" class="btn">新增</a>
-            </div>
-        </div>
     </div>
 </div>
 </div>

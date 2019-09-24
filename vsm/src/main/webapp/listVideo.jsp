@@ -119,36 +119,36 @@
     </div>
     <div class="mainContent">
         <div class="box_t">
-            <span class="name">人员列表</span>
+            <span class="name">在线视频列表</span>
         </div>
         <div class="space_hx">&nbsp;</div>
         <!--列表-->
         <table cellpadding="0" cellspacing="0" class="list_hy">
             <tr>
-                <th scope="col">用户名</th>
-                <th scope="col">联系电话</th>
-                <th scope="col">个人邮箱</th>
-                <th scope="col">状态</th>
+                <th scope="col">上传人id</th>
+                <th scope="col">视频标题</th>
+                <th scope="col">视频类型</th>
+                <th scope="col">视频描述</th>
+                <th scope="col">视频点击量</th>
+                <th scope="col">视频状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${admins}" var="admin">
+            <c:forEach items="${videos}" var="video">
                 <tr>
-                    <td>${admin.adminName}</td>
-                    <td>${admin.adminPhone}</td>
-                    <td>${admin.adminMail}</td>
-                    <td>${admin.status}</td>
+                    <td>${video.userId}</td>
+                    <td>${video.videoTitle}</td>
+                    <td>${video.videoType}</td>
+                    <td>${video.videoDescription}</td>
+                    <td>${video.videoClicks}</td>
+                    <td>${video.status}</td>
                     <td>
-                        <a href="/blockadeAdmin?name=${admin.adminName}" class="btn">封锁</a>
-                        <a href="/UnsealAdmin?name=${admin.adminName}" class="btn">解封</a>
+                        <a href="/detailVideo?id=${video.id}" class="btn">详情</a>
+                        <a href="/upperVideo?id=${video.id}" class="btn">上架</a>
+                        <a href="/lowerVideo?id=${video.id}" class="btn">下架</a>
                     </td>
                 </tr>
             </c:forEach>
         </table>
-        <div class="r_foot">
-            <div class="r_foot_m">
-                <a href="addAdmin.jsp" class="btn">新增</a>
-            </div>
-        </div>
     </div>
 </div>
 </div>

@@ -92,4 +92,34 @@ public class AdminController {
         }
     }
 
+    @RequestMapping(value = "addAdmin")
+    public String addAdmin(HttpServletRequest request){
+        try {
+            String name = request.getParameter("name");
+            if (adminService.queryAdminByName(name)!=null){
+                request.setAttribute("addAdminMsg","该管理员名称已存在");
+                return "addAdmin";
+            }
+            String onePassword = request.getParameter("onePassword");
+            String twoPassword = request.getParameter("twoPassword");
+            if (!StrUtil.equals(onePassword,twoPassword)){
+                request.setAttribute("addAdminMsg","输入的2次密码不一致");
+                return "addAdmin";
+            }
+            String adminPhone = request.getParameter("adminPhone");
+            String adminMail = request.getParameter("adminMail");
+            TAdmin admin = new TAdmin();
+            admin.setAdminName(name);admin.setAdminPassword(onePassword);
+            admin.setAdminPhone(adminPhone);admin.setAdminMail(adminMail);
+            adminService.addAdmin(admin);
+
+            List<TAdmin> admins = adminService.listAdmins();
+            request.setAttribute("admins",admins);
+            return "listAdmin";
+        }catch (Exception e){
+            logger.error("添加系统人员账号失败，原因{}",e);
+            return e.getMessage();
+        }
+    }
+
 }
