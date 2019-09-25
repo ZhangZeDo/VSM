@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TUser" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -60,7 +62,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>账号管理</a></span>
                         <i>&nbsp;</i>
@@ -131,18 +133,32 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${users}" var="user">
-                <tr>
-                    <td>${user.userName}</td>
-                    <td>${user.userPhone}</td>
-                    <td>${user.userMail}</td>
-                    <td>${user.status}</td>
-                    <td>
-                        <a href="/blockadeUser?name=${user.userName}" class="btn">封锁</a>
-                        <a href="/UnsealUser?name=${user.userName}" class="btn">解封</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TUser> users = (List<TUser>) request.getAttribute("users");
+                for (TUser user : users) {
+            %>
+            <tr>
+                <td><%=user.getUserName()%></td>
+                <td><%=user.getUserPhone()%></td>
+                <td><%=user.getUserMail()%></td>
+                <%
+                    if (user.getStatus()==1){
+                %>
+                <td>使用中...</td>
+                <td><a href="/blockadeUser?name=<%=user.getUserName()%>" class="btn">封锁</a></td>
+                <%
+                }
+                else{
+                %>
+                <td>禁用中...</td>
+                <td><a href="/UnsealUser?name=<%=user.getUserName()%>" class="btn">解封</a></td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
         </table>
     </div>
 </div>

@@ -46,7 +46,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li >
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -60,7 +60,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>账号管理</a></span>
                         <i>&nbsp;</i>

@@ -1,3 +1,6 @@
+
+<%@ page import="com.zzd.model.TAdmin" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +49,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -60,7 +63,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>账号管理</a></span>
                         <i>&nbsp;</i>
@@ -122,7 +125,7 @@
             <span class="name">人员列表</span>
         </div>
         <div class="space_hx">&nbsp;</div>
-        <!--列表-->
+
         <table cellpadding="0" cellspacing="0" class="list_hy">
             <tr>
                 <th scope="col">用户名</th>
@@ -131,18 +134,32 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${admins}" var="admin">
+            <%
+                List<TAdmin> admins = (List<TAdmin>) request.getAttribute("admins");
+                for (TAdmin admin : admins) {
+            %>
                 <tr>
-                    <td>${admin.adminName}</td>
-                    <td>${admin.adminPhone}</td>
-                    <td>${admin.adminMail}</td>
-                    <td>${admin.status}</td>
-                    <td>
-                        <a href="/blockadeAdmin?name=${admin.adminName}" class="btn">封锁</a>
-                        <a href="/UnsealAdmin?name=${admin.adminName}" class="btn">解封</a>
-                    </td>
+                    <td><%=admin.getAdminName()%></td>
+                    <td><%=admin.getAdminPhone()%></td>
+                    <td><%=admin.getAdminMail()%></td>
+                    <%
+                        if (admin.getStatus()==1){
+                    %>
+                        <td>使用中...</td>
+                        <td><a href="/blockadeAdmin?name=<%=admin.getAdminName()%>" class="btn">封锁</a></td>
+                    <%
+                        }
+                        else{
+                    %>
+                        <td>禁用中...</td>
+                        <td><a href="/UnsealAdmin?name=<%=admin.getAdminName()%>" class="btn">解封</a></td>
+                    <%
+                        }
+                    %>
                 </tr>
-            </c:forEach>
+            <%
+                }
+            %>
         </table>
         <div class="r_foot">
             <div class="r_foot_m">

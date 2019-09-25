@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TApplyRecord" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -60,7 +62,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>账号管理</a></span>
                         <i>&nbsp;</i>
@@ -131,18 +133,41 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${applyRecords}" var="applyRecord">
-                <tr>
-                    <td>${applyRecord.userName}</td>
-                    <td>${applyRecord.remark}</td>
-                    <td>${applyRecord.reply}</td>
-                    <td>${applyRecord.status}</td>
-                    <td>
-                        <a href="/AgreeApply?id=${applyRecord.id}" class="btn">同意</a>
-                        <a href="/RejectApply?id=${applyRecord.id}" class="btn">驳回</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TApplyRecord> applyRecords = (List<TApplyRecord>) request.getAttribute("applyRecords");
+                for (TApplyRecord applyRecord : applyRecords) {
+            %>
+            <tr>
+                <td><%=applyRecord.getUserName()%></td>
+                <td><%=applyRecord.getRemark()%></td>
+                <td><%=applyRecord.getReply()%></td>
+                <%
+                    if (applyRecord.getStatus()==1){
+                %>
+                <td>审核中...</td>
+                <td>
+                    <a href="/AgreeApply?id=<%=applyRecord.getId()%>" class="btn">同意</a>
+                    <a href="/RejectApply?id=<%=applyRecord.getId()%>" class="btn">拒绝</a>
+                </td>
+
+                <%
+                }
+                else if (applyRecord.getStatus()==0){
+                %>
+                <td>已驳回...</td>
+                <td>无</td>
+                <%
+                    }else{
+                %>
+                <td>已同意...</td>
+                <td>无</td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
         </table>
     </div>
 </div>

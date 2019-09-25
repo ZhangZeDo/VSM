@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TReportRecord" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -94,7 +96,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>记录管理</a></span>
                         <i>&nbsp;</i>
@@ -132,19 +134,53 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${reportRecords}" var="reportRecord">
-                <tr>
-                    <td>${reportRecord.userId}</td>
-                    <td>${reportRecord.reportId}</td>
-                    <td>${reportRecord.reportType}</td>
-                    <td>${reportRecord.remark}</td>
-                    <td>${reportRecord.status}</td>
-                    <td>
-                        <a href="/agreeReport?id=${reportRecord.id}" class="btn">同意</a>
-                        <a href="/rejectReport?id=${reportRecord.id}" class="btn">驳回</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TReportRecord> reportRecords = (List<TReportRecord>) request.getAttribute("reportRecords");
+                for (TReportRecord reportRecord : reportRecords) {
+            %>
+            <tr>
+                <td><%=reportRecord.getUserId()%></td>
+                <td><%=reportRecord.getReportId()%></td>
+                <%
+                    if (reportRecord.getReportType()==1){
+                %>
+                <td>视频</td>
+                <%
+                    }else{
+                %>
+                <td>评论</td>
+                <%
+                    }
+                %>
+
+                <td><%=reportRecord.getRemark()%></td>
+                <%
+                    if (reportRecord.getStatus()==1){
+                %>
+                <td>审核中...</td>
+                <td>
+                    <a href="/agreeReport?id=<%=reportRecord.getId()%>" class="btn">同意</a>
+                    <a href="/rejectReport?id=<%=reportRecord.getId()%>" class="btn">拒绝</a>
+                </td>
+                <%
+                }
+                else if (reportRecord.getStatus()==0){
+                %>
+                <td>已驳回...</td>
+                <td>无</td>
+                <%
+                }else{
+                %>
+                <td>已同意...</td>
+                <td>无</td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
+
         </table>
     </div>
 </div>

@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TVideoType" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li >
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -77,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>视频管理</a></span>
                         <i>&nbsp;</i>
@@ -129,16 +131,30 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${videoTypes}" var="videoType">
-                <tr>
-                    <td>${videoType.videoTypeName}</td>
-                    <td>${videoType.status}</td>
-                    <td>
-                        <a href="/blockadeVideoType?id=${videoType.id}" class="btn">封锁</a>
-                        <a href="/UnsealVideoType?id=${videoType.id}" class="btn">解封</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TVideoType> videoTypes = (List<TVideoType>) request.getAttribute("videoTypes");
+                for (TVideoType videoType : videoTypes) {
+            %>
+            <tr>
+                <td><%=videoType.getVideoTypeName()%></td>
+                <%
+                    if (videoType.getStatus()==1){
+                %>
+                <td>使用中...</td>
+                <td><a href="/blockadeVideoType?id=<%=videoType.getId()%>" class="btn">封锁</a></td>
+                <%
+                }
+                else{
+                %>
+                <td>禁用中...</td>
+                <td><a href="/UnsealVideoType?id=<%=videoType.getId()%>" class="btn">解封</a></td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
         </table>
         <div class="r_foot">
             <div class="r_foot_m">

@@ -129,7 +129,7 @@
                 </li>
                 <li class="clearfix">
                     <span class="title">状态：</span>
-                    <div class="li_r">${Admin.status}</div>
+                    <div class="li_r">使用中...</div>
                 </li>
                 <li class="clearfix">
                     <span class="title">联系电话：</span>

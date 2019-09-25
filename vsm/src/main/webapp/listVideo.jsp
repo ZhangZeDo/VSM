@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TVideo" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -77,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>视频管理</a></span>
                         <i>&nbsp;</i>
@@ -127,27 +129,44 @@
             <tr>
                 <th scope="col">上传人id</th>
                 <th scope="col">视频标题</th>
-                <th scope="col">视频类型</th>
                 <th scope="col">视频描述</th>
                 <th scope="col">视频点击量</th>
                 <th scope="col">视频状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${videos}" var="video">
-                <tr>
-                    <td>${video.userId}</td>
-                    <td>${video.videoTitle}</td>
-                    <td>${video.videoType}</td>
-                    <td>${video.videoDescription}</td>
-                    <td>${video.videoClicks}</td>
-                    <td>${video.status}</td>
-                    <td>
-                        <a href="/detailVideo?id=${video.id}" class="btn">详情</a>
-                        <a href="/upperVideo?id=${video.id}" class="btn">上架</a>
-                        <a href="/lowerVideo?id=${video.id}" class="btn">下架</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TVideo> videos = (List<TVideo>) request.getAttribute("videos");
+                for (TVideo video : videos) {
+            %>
+            <tr>
+                <td><%=video.getUserId()%></td>
+                <td><%=video.getVideoTitle()%></td>
+                <td><%=video.getVideoDescription()%></td>
+                <td><%=video.getVideoClicks()%></td>
+                <%
+                    if (video.getStatus()==1){
+                %>
+                <td>上架中...</td>
+                <td>
+                    <a href="/detailVideo?id=<%=video.getId()%>" class="btn">详情</a>
+                    <a href="/lowerVideo?id=<%=video.getId()%>" class="btn">下架</a>
+                </td>
+                <%
+                }
+                else{
+                %>
+                <td>已下架...</td>
+                <td>
+                    <a href="/detailVideo?id=<%=video.getId()%>" class="btn">详情</a>
+                    <a href="/upperVideo?id=<%=video.getId()%>" class="btn">上架</a>
+                </td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
         </table>
     </div>
 </div>

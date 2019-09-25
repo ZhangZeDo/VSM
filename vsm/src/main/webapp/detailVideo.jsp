@@ -122,7 +122,16 @@
         </div>
 
         <div class="xjhy">
-            视频详情！
+            <div align="left" style="margin-left: 40px">
+                <video width="400" height="400" controls autoplay>
+                    <source src="https://www.runoob.com/try/demo_source/movie.mp4" type="video/mp4">
+                </video>
+                <ul class="hypz gjpz clearfix">
+                    <li class="tj_btn">
+                        <a href="javascript:history.go(-1);" class="back">返回</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

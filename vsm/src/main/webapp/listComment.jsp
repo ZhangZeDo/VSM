@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TComment" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -94,7 +96,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>记录管理</a></span>
                         <i>&nbsp;</i>
@@ -131,17 +133,33 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${comments}" var="comment">
-                <tr>
-                    <td>${comment.userId}</td>
-                    <td>${comment.videoId}</td>
-                    <td>${comment.comment}</td>
-                    <td>${comment.status}</td>
-                    <td>
-                        <a href="/closeComment?id=${comment.id}" class="btn">关闭</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TComment> comments = (List<TComment>) request.getAttribute("comments");
+                for (TComment comment : comments) {
+            %>
+            <tr>
+                <td><%=comment.getUserId()%></td>
+                <td><%=comment.getVideoId()%></td>
+                <td><%=comment.getComment()%></td>
+                <%
+                    if (comment.getStatus()==1){
+                %>
+                <td>保留中...</td>
+                <td><a href="/closeComment?id=<%=comment.getId()%>" class="btn">关闭</a></td>
+                <%
+                }
+                else{
+                %>
+                <td>已关闭...</td>
+                <td>无</td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
+
         </table>
     </div>
 </div>

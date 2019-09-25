@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TUploadRecord" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li >
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -77,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>视频管理</a></span>
                         <i>&nbsp;</i>
@@ -127,25 +129,46 @@
             <tr>
                 <th scope="col">上传人id</th>
                 <th scope="col">视频标题</th>
-                <th scope="col">视频类型</th>
                 <th scope="col">视频描述</th>
                 <th scope="col">视频状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${uploadRecords}" var="uploadRecord">
-                <tr>
-                    <td>${uploadRecord.userId}</td>
-                    <td>${uploadRecord.uploadTitle}</td>
-                    <td>${uploadRecord.uploadType}</td>
-                    <td>${uploadRecord.uploadDescription}</td>
-                    <td>${uploadRecord.status}</td>
-                    <td>
-                        <a href="/detailUpload?id=${uploadRecord.id}" class="btn">详情</a>
-                        <a href="/agreeUpload?id=${uploadRecord.id}" class="btn">同意</a>
-                        <a href="/rejectUpload?id=${uploadRecord.id}" class="btn">拒接</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TUploadRecord> uploadRecords = (List<TUploadRecord>) request.getAttribute("uploadRecords");
+                for (TUploadRecord uploadRecord : uploadRecords) {
+            %>
+            <tr>
+                <td><%=uploadRecord.getUserId()%></td>
+                <td><%=uploadRecord.getUploadTitle()%></td>
+                <td><%=uploadRecord.getUploadDescription()%></td>
+                <%
+                    if (uploadRecord.getStatus()==1){
+                %>
+                <td>审核中...</td>
+                <td>
+                    <a href="/detailUpload?id=<%=uploadRecord.getId()%>" class="btn">详情</a>
+                    <a href="/agreeUpload?id=<%=uploadRecord.getId()%>" class="btn">同意</a>
+                    <a href="/rejectUpload?id=<%=uploadRecord.getId()%>" class="btn">拒绝</a>
+                </td>
+
+                <%
+                }
+                else if (uploadRecord.getStatus()==0){
+                %>
+                <td>已驳回...</td>
+                <td><a href="/detailUpload?id=<%=uploadRecord.getId()%>" class="btn">详情</a></td>
+                <%
+                }else{
+                %>
+                <td>已同意...</td>
+                <td><a href="/detailUpload?id=<%=uploadRecord.getId()%>" class="btn">详情</a></td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
         </table>
     </div>
 </div>

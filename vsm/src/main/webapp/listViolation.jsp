@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.model.TViolationRecord" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -46,7 +48,7 @@
     <div class="leftMenu">
         <div>
             <ul class="sidenav">
-                <li class="now">
+                <li>
                     <div class="nav_m">
                         <span><a>个人中心</a></span>
                         <i>&nbsp;</i>
@@ -77,7 +79,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li >
                     <div class="nav_m">
                         <span><a>视频管理</a></span>
                         <i>&nbsp;</i>
@@ -94,7 +96,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="now">
                     <div class="nav_m">
                         <span><a>记录管理</a></span>
                         <i>&nbsp;</i>
@@ -130,16 +132,31 @@
                 <th scope="col">状态</th>
                 <th scope="col">操作</th>
             </tr>
-            <c:forEach items="${violationRecords}" var="violation">
-                <tr>
-                    <td>${violation.userId}</td>
-                    <td>${violation.remark}</td>
-                    <td>${violation.status}</td>
-                    <td>
-                        <a href="/closeViolation?id=${violation.id}" class="btn">关闭</a>
-                    </td>
-                </tr>
-            </c:forEach>
+            <%
+                List<TViolationRecord> violationRecords = (List<TViolationRecord>) request.getAttribute("violationRecords");
+                for (TViolationRecord violationRecord : violationRecords) {
+            %>
+            <tr>
+                <td><%=violationRecord.getUserId()%></td>
+                <td><%=violationRecord.getRemark()%></td>
+                <%
+                    if (violationRecord.getStatus()==1){
+                %>
+                <td>保留中...</td>
+                <td><a href="/closeViolation?id=<%=violationRecord.getId()%>" class="btn">关闭</a></td>
+                <%
+                }
+                else{
+                %>
+                <td>已关闭...</td>
+                <td>无</td>
+                <%
+                    }
+                %>
+            </tr>
+            <%
+                }
+            %>
         </table>
     </div>
 </div>
