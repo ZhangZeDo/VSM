@@ -1,5 +1,6 @@
 package com.zzd.service;
 
+import com.zzd.dto.VideoDTO;
 import com.zzd.model.TVideo;
 
 import java.util.List;
@@ -13,8 +14,13 @@ public interface VideoService {
 
     List<TVideo> queryVideoByTitle(String title);
 
-    TVideo queryVideoById(String id);
+    VideoDTO queryVideoById(String id);
 
+    List<TVideo> getBigClickVideo();
+
+    List<TVideo> getBigPraises();
+
+    List<TVideo> listVideoByType(String type);
 
 
 }

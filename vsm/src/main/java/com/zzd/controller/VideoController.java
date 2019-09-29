@@ -1,5 +1,6 @@
 package com.zzd.controller;
 
+import com.zzd.dto.VideoDTO;
 import com.zzd.model.TAdmin;
 import com.zzd.model.TVideo;
 import com.zzd.service.VideoService;
@@ -70,9 +71,22 @@ public class VideoController {
     public String detailVideo(HttpServletRequest request){
         try{
             String id = request.getParameter("id");
-            TVideo video = videoService.queryVideoById(id);
-            request.setAttribute("video",video);
+            VideoDTO videoDTO = videoService.queryVideoById(id);
+            request.setAttribute("video",videoDTO);
             return "detailVideo";
+        }catch (Exception e){
+            logger.error("获取在线视频详情失败，原因：{}",e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value = "/videoDetail")
+    public String videoDetail(HttpServletRequest request){
+        try{
+            String id = request.getParameter("id");
+            VideoDTO videoDTO = videoService.queryVideoById(id);
+            request.setAttribute("video",videoDTO);
+            return "videoDetail";
         }catch (Exception e){
             logger.error("获取在线视频详情失败，原因：{}",e);
             return e.getMessage();

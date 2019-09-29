@@ -27,6 +27,14 @@ public class VideoTypeServiceImpl implements VideoTypeService {
     }
 
     @Override
+    public List<TVideoType> getVideoTypes() {
+        TVideoTypeExample example = new TVideoTypeExample();
+        example.createCriteria().andStatusEqualTo((byte)1);
+        List<TVideoType> videoTypes = videoTypeMapper.selectByExample(example);
+        return videoTypes;
+    }
+
+    @Override
     public TVideoType queryVideoTypeById(String id) {
         TVideoType videoType = videoTypeMapper.selectByPrimaryKey(id);
         return videoType;

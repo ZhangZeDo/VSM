@@ -4,9 +4,8 @@ import com.xiaoleilu.hutool.util.StrUtil;
 import com.zzd.model.TAdmin;
 import com.zzd.model.TApplyRecord;
 import com.zzd.model.TUser;
-import com.zzd.service.AdminService;
-import com.zzd.service.ApplyRecordService;
-import com.zzd.service.UserService;
+import com.zzd.model.TVideoType;
+import com.zzd.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -26,6 +25,10 @@ public class UserController {
     private AdminService adminService;
     @Resource
     private ApplyRecordService applyRecordService;
+    @Resource
+    private VideoTypeService videoTypeService;
+    @Resource
+    private VideoService videoService;
 
     @RequestMapping(value = "/userLogin" , method = RequestMethod.POST)
     public String userLogin(HttpServletRequest request){
@@ -44,7 +47,10 @@ public class UserController {
                 }
                 HttpSession session = request.getSession();
                 session.setAttribute("User",userService.queryUsersByName(user.getUserName()));
-                return "homePage";
+                //显示视频分类
+                List<TVideoType> videoTypes = videoTypeService.listVideoTypes();
+                request.setAttribute("videoTypes",videoTypes);
+                return "vsmPage";
             }else if (adminService.queryAdminByName(user.getUserName())!=null){
                 TAdmin admin = new TAdmin();
                 admin.setAdminName(user.getUserName());

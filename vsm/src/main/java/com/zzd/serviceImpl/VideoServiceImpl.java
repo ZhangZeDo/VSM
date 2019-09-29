@@ -1,14 +1,18 @@
 package com.zzd.serviceImpl;
 
 import com.zzd.dao.TVideoMapper;
-import com.zzd.dao.TVideoTypeMapper;
+import com.zzd.dto.VideoDTO;
 import com.zzd.model.TVideo;
 import com.zzd.model.TVideoExample;
+import com.zzd.model.TVideoType;
 import com.zzd.service.VideoService;
+import com.zzd.service.VideoTypeService;
 import com.zzd.utils.UniqueIdUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +20,8 @@ import java.util.List;
 public class VideoServiceImpl implements VideoService {
     @Resource
     private TVideoMapper videoMapper;
+    @Resource
+    private VideoTypeService videoTypeService;
 
     @Override
     public List<TVideo> listVideos() {
@@ -52,9 +58,57 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public TVideo queryVideoById(String id) {
+    public VideoDTO queryVideoById(String id) {
         TVideo video = videoMapper.selectByPrimaryKey(id);
-        return video;
+        VideoDTO videoDTO = new VideoDTO();
+        BeanUtils.copyProperties(video,videoDTO);
+        /*TVideoType videoType = videoTypeService.queryVideoTypeById(video.getId());
+        videoDTO.setTypeName(videoType.getVideoTypeName());*/
+        return videoDTO;
+    }
+
+    @Override
+    public List<TVideo> getBigClickVideo() {
+        TVideoExample example = new TVideoExample();
+        example.createCriteria().andStatusEqualTo((byte)1);
+        example.setOrderByClause("video_clicks DESC");
+        List<TVideo> videos = videoMapper.selectByExample(example);
+        List<TVideo> list = new ArrayList<>();
+        for (int i=0;i<videos.size();i++){
+            list.add(videos.get(i));
+            if (i==3){
+                break;
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<TVideo> getBigPraises() {
+        TVideoExample example = new TVideoExample();
+        example.createCriteria().andStatusEqualTo((byte)1);
+        example.setOrderByClause("video_praises DESC");
+        List<TVideo> videos = videoMapper.selectByExample(example);
+        List<TVideo> list = new ArrayList<>();
+        for (int i=0;i<videos.size();i++){
+            list.add(videos.get(i));
+            if (i==3){
+                break;
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public List<TVideo> listVideoByType(String type) {
+        TVideoExample example = new TVideoExample();
+        if (!type.isEmpty()){
+            example.createCriteria().andVideoTypeEqualTo(videoTypeService.queryVideoTypeByName(type).getId());
+        }else {
+            example.createCriteria().andStatusEqualTo((byte)1);
+        }
+        List<TVideo> videos = videoMapper.selectByExample(example);
+        return videos;
     }
 
     private void setVideoInfo(TVideo video,String loginName){

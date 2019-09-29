@@ -8,6 +8,8 @@ import java.util.List;
 public interface VideoTypeService {
     List<TVideoType> listVideoTypes();
 
+    List<TVideoType> getVideoTypes();
+
     TVideoType queryVideoTypeById(String id);
 
     int addVideoType(TVideoType videoType);
