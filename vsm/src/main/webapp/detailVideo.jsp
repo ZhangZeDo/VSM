@@ -1,3 +1,5 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.zzd.dto.VideoDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -123,8 +125,11 @@
 
         <div class="xjhy">
             <div align="left" style="margin-left: 40px">
+                <%
+                    VideoDTO video = (VideoDTO)request.getAttribute("video");
+                %>
                 <video width="400" height="400" controls autoplay>
-                    <source src="https://www.runoob.com/try/demo_source/movie.mp4" type="video/mp4">
+                    <source src="<%=video.getVideoUrl()%>" type="video/mp4">
                 </video>
                 <ul class="hypz gjpz clearfix">
                     <li class="tj_btn">

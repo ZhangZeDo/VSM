@@ -2,9 +2,11 @@ package com.zzd.serviceImpl;
 
 import com.zzd.dao.TVideoMapper;
 import com.zzd.dto.VideoDTO;
+import com.zzd.model.TRewardRecord;
 import com.zzd.model.TVideo;
 import com.zzd.model.TVideoExample;
 import com.zzd.model.TVideoType;
+import com.zzd.service.RewardRecordService;
 import com.zzd.service.VideoService;
 import com.zzd.service.VideoTypeService;
 import com.zzd.utils.UniqueIdUtil;
@@ -22,11 +24,25 @@ public class VideoServiceImpl implements VideoService {
     private TVideoMapper videoMapper;
     @Resource
     private VideoTypeService videoTypeService;
+    @Resource
+    private RewardRecordService rewardRecordService;
 
     @Override
     public List<TVideo> listVideos() {
         TVideoExample example = new TVideoExample();
         example.createCriteria();
+        List<TVideo> videos = videoMapper.selectByExample(example);
+        return videos;
+    }
+
+    @Override
+    public List<TVideo> listVideosByType(String type) {
+        TVideoExample example = new TVideoExample();
+        if (type.isEmpty()){
+            example.createCriteria().andStatusEqualTo((byte)1);
+        }else{
+            example.createCriteria().andStatusEqualTo((byte)1).andVideoTypeEqualTo(type);
+        }
         List<TVideo> videos = videoMapper.selectByExample(example);
         return videos;
     }
@@ -62,8 +78,9 @@ public class VideoServiceImpl implements VideoService {
         TVideo video = videoMapper.selectByPrimaryKey(id);
         VideoDTO videoDTO = new VideoDTO();
         BeanUtils.copyProperties(video,videoDTO);
-        /*TVideoType videoType = videoTypeService.queryVideoTypeById(video.getId());
-        videoDTO.setTypeName(videoType.getVideoTypeName());*/
+        //设置视频类型名称
+        TVideoType videoType = videoTypeService.queryVideoTypeById(video.getVideoType());
+        videoDTO.setTypeName(videoType.getVideoTypeName());
         return videoDTO;
     }
 
@@ -92,7 +109,7 @@ public class VideoServiceImpl implements VideoService {
         List<TVideo> list = new ArrayList<>();
         for (int i=0;i<videos.size();i++){
             list.add(videos.get(i));
-            if (i==3){
+            if (i==2){
                 break;
             }
         }
@@ -102,13 +119,33 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public List<TVideo> listVideoByType(String type) {
         TVideoExample example = new TVideoExample();
-        if (!type.isEmpty()){
-            example.createCriteria().andVideoTypeEqualTo(videoTypeService.queryVideoTypeByName(type).getId());
-        }else {
+        if (type==null || type.length()==0){
             example.createCriteria().andStatusEqualTo((byte)1);
+        }else {
+            example.createCriteria().andStatusEqualTo((byte)1).andVideoTypeEqualTo(videoTypeService.queryVideoTypeByName(type).getId());
         }
         List<TVideo> videos = videoMapper.selectByExample(example);
         return videos;
+    }
+
+    @Override
+    public List<VideoDTO> listMyVideos(String userId) {
+        TVideoExample example = new TVideoExample();
+        example.createCriteria().andStatusEqualTo((byte)1).andUserIdEqualTo(userId);
+        List<TVideo> myVideos = videoMapper.selectByExample(example);
+        List<VideoDTO> videoDTOS = new ArrayList<>();
+        for (TVideo myVideo : myVideos) {
+            VideoDTO videoDTO = new VideoDTO();
+            BeanUtils.copyProperties(myVideo,videoDTO);
+            //设置视频类型名称
+            TVideoType videoType = videoTypeService.queryVideoTypeById(myVideo.getVideoType());
+            videoDTO.setTypeName(videoType.getVideoTypeName());
+            //设置该视频共收获打赏量
+            int total =  rewardRecordService.listRewardByVideoId(myVideo.getId());
+            videoDTO.setRewardTotal(total);
+            videoDTOS.add(videoDTO);
+        }
+        return videoDTOS;
     }
 
     private void setVideoInfo(TVideo video,String loginName){

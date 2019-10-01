@@ -32,6 +32,22 @@ public class RewardRecordServiceImpl implements RewardRecordService {
         return rewardRecords;
     }
 
+    @Override
+    public int listRewardByVideoId(String id) {
+        TRewardRecordExample example = new TRewardRecordExample();
+        example.createCriteria().andVideoIdEqualTo(id);
+        List<TRewardRecord> rewardRecords = rewardRecordMapper.selectByExample(example);
+        if (rewardRecords==null || rewardRecords.size()==0){
+            return 0;
+        }else {
+            int total=0;
+            for (TRewardRecord rewardRecord : rewardRecords) {
+                total = total + rewardRecord.getRewardNum();
+            }
+            return total;
+        }
+    }
+
     private void setRewardRecordInfo(TRewardRecord rewardRecord,String loginName){
         if (rewardRecord.getCreateBy()==null){
             rewardRecord.setCreateBy(loginName);

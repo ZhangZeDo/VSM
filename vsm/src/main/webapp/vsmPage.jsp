@@ -1,5 +1,6 @@
 <%@ page import="com.zzd.model.TVideoType" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.zzd.model.TVideo" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,6 +14,13 @@
     <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
 </head>
 <body>
+<%
+    List<TVideo> bigClickVideo = (List<TVideo>)session.getAttribute("bigClickVideo");
+    List<TVideo> bigPraisesVideo = (List<TVideo>)session.getAttribute("bigPraisesVideo");
+    List<TVideoType> videoTypes = (List<TVideoType>)session.getAttribute("videoTypes");
+    List<TVideo> videos = (List<TVideo>)request.getAttribute("videos");
+
+%>
 <div class="header" style="background-color: #c71012;height: 15%">
     <div style="padding-top: 40px;padding-left: 50px">
         <p align="left" style="font-size: 25px">
@@ -21,7 +29,7 @@
         <div style="float: right;padding-right: 20px">
             <table>
                 <tr>
-                    <td style="padding-right: 15px"><a href="myVideo.jsp" style="color: #DEDEDE">我的视频</a></td>
+                    <td style="padding-right: 15px"><a href="/getMyVideos" style="color: #DEDEDE">我的视频</a></td>
                     <td style="padding-right: 15px"><a href="userDetail.jsp" style="color: #DEDEDE">个人中心</a></td>
                 </tr>
             </table>
@@ -34,7 +42,6 @@
             <tr>
                 <th scope="col"><a href="">首页</a>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                 <%
-                    List<TVideoType> videoTypes = (List<TVideoType>)request.getAttribute("videoTypes");
                     for (TVideoType videoType : videoTypes) {
                 %>
                 <th scope="col"><a href=""><%=videoType.getVideoTypeName()%></>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -62,13 +69,13 @@
                         <!-- 轮播（Carousel）项目 -->
                         <div class="carousel-inner">
                             <div class="item active">
-                                <img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" style="height: 265px;width: 400px">
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(0).getId()%>"><img src="<%=bigPraisesVideo.get(0).getCoverUrl()%>" width="400px" height="265px"/></a>
                             </div>
                             <div class="item">
-                                <img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" style="height: 265px;width: 400px">
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(1).getId()%>"><img src="<%=bigPraisesVideo.get(1).getCoverUrl()%>" width="400px" height="265px"/></a>
                             </div>
                             <div class="item">
-                                <img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" style="height: 265px;width: 400px">
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(1).getId()%>"><img src="<%=bigPraisesVideo.get(1).getCoverUrl()%>" width="400px" height="265px"/></a>
                             </div>
                         </div>
                         <!-- 轮播（Carousel）导航 -->
@@ -82,18 +89,17 @@
                         </a>
                     </div>
                 </td>
-                <td style="padding-left: 15px"><a href="/videoDetail?id=V20190924222637"><img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" width="200px" height="125" /></a></td>
-                <td style="padding-left: 15px"><a href="videoDetail.jsp"><img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" width="200px" height="125" /></a></td>
-                <td style="padding-left: 15px"><a href="videoDetail.jsp"><img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" width="200px" height="125" /></a></td>
+                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
             </tr>
             <tr>
-                <td style="padding-left: 15px;padding-top: 10px"><img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" width="200px" height="125" /></td>
-                <td style="padding-left: 15px;padding-top: 10px"><img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" width="200px" height="125" /></td>
-                <td style="padding-left: 15px;padding-top: 10px"><img src="https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=0c78105b888ba61ec0eece2f713597cc/0e2442a7d933c8956c0e8eeadb1373f08202002a.jpg" width="200px" height="125" /></td>
+                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
             </tr>
         </table>
     </div>
-
     <br>
     <div style="padding-top: 4px;">
         <p style="font-size: 20px ;margin-left: 16%;float: left">全部</p>
@@ -117,7 +123,6 @@
             </tr>
         </table>
     </div>
-
 </div>
 </body>
 </html>

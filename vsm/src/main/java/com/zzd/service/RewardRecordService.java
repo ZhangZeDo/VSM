@@ -9,4 +9,6 @@ public interface RewardRecordService {
     int addRewardRecord(TRewardRecord rewardRecord);
 
     List<TRewardRecord> listReward();
+
+    int listRewardByVideoId(String id);
 }

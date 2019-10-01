@@ -1,3 +1,5 @@
+<%@ page import="com.zzd.dto.VideoDTO" %>
+<%@ page import="com.zzd.model.TUploadRecord" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -123,8 +125,11 @@
 
         <div class="xjhy">
             <div align="left" style="margin-left: 40px">
+                <%
+                    TUploadRecord uploadRecord = (TUploadRecord)request.getAttribute("uploadRecord");
+                %>
                 <video width="400" height="400" controls autoplay>
-                    <source src="https://www.runoob.com/try/demo_source/movie.mp4" type="video/mp4">
+                    <source src="<%=uploadRecord.getUploadUrl()%>" type="video/mp4">
                 </video>
                 <ul class="hypz gjpz clearfix">
                     <li class="tj_btn">

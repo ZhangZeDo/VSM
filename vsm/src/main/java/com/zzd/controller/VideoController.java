@@ -2,6 +2,7 @@ package com.zzd.controller;
 
 import com.zzd.dto.VideoDTO;
 import com.zzd.model.TAdmin;
+import com.zzd.model.TUser;
 import com.zzd.model.TVideo;
 import com.zzd.service.VideoService;
 import org.slf4j.Logger;
@@ -92,6 +93,21 @@ public class VideoController {
             return e.getMessage();
         }
     }
+
+    @RequestMapping(value = "getMyVideos")
+    public String getMyVideos(HttpServletRequest request){
+        try{
+            HttpSession session = request.getSession();
+            TUser user = (TUser)session.getAttribute("User");
+            List<VideoDTO> myVideos = videoService.listMyVideos(user.getId());
+            request.setAttribute("myVideos",myVideos);
+            return "myVideo";
+        }catch (Exception e){
+            logger.error("查询我的视频失败，原因{}",e);
+            return e.getMessage();
+        }
+    }
+
 
 
 }

@@ -1,10 +1,7 @@
 package com.zzd.controller;
 
 import com.xiaoleilu.hutool.util.StrUtil;
-import com.zzd.model.TAdmin;
-import com.zzd.model.TApplyRecord;
-import com.zzd.model.TUser;
-import com.zzd.model.TVideoType;
+import com.zzd.model.*;
 import com.zzd.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +44,18 @@ public class UserController {
                 }
                 HttpSession session = request.getSession();
                 session.setAttribute("User",userService.queryUsersByName(user.getUserName()));
+                //查询推荐点击量高视频
+                List<TVideo> bigClickVideo = videoService.getBigClickVideo();
+                session.setAttribute("bigClickVideo",bigClickVideo);
+                //查询推荐点赞量高视频
+                List<TVideo> bigPraisesVideo = videoService.getBigPraises();
+                session.setAttribute("bigPraisesVideo",bigPraisesVideo);
                 //显示视频分类
                 List<TVideoType> videoTypes = videoTypeService.listVideoTypes();
-                request.setAttribute("videoTypes",videoTypes);
+                session.setAttribute("videoTypes",videoTypes);
+                //显示首页视频
+                List<TVideo> videos = videoService.listVideoByType(null);
+                request.setAttribute("videos",videos);
                 return "vsmPage";
             }else if (adminService.queryAdminByName(user.getUserName())!=null){
                 TAdmin admin = new TAdmin();
@@ -191,5 +197,4 @@ public class UserController {
             return e.getMessage();
         }
     }
-
 }
