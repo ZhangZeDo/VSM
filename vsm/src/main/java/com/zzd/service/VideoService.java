@@ -8,8 +8,6 @@ import java.util.List;
 public interface VideoService {
     List<TVideo> listVideos();
 
-    List<TVideo> listVideosByType(String type);
-
     int updateVideo(TVideo video,String loginName);
 
     int addVideo(TVideo video);
@@ -25,6 +23,10 @@ public interface VideoService {
     List<TVideo> listVideoByType(String type);
 
     List<VideoDTO> listMyVideos(String userId);
+
+    void addVideoClickById(String id);
+
+    void addVideoParisesById(String id);
 
 
 }

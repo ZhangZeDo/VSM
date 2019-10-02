@@ -4,7 +4,9 @@ import com.zzd.dto.VideoDTO;
 import com.zzd.model.TAdmin;
 import com.zzd.model.TUser;
 import com.zzd.model.TVideo;
+import com.zzd.model.TVideoType;
 import com.zzd.service.VideoService;
+import com.zzd.service.VideoTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ public class VideoController {
 
     @Resource
     private VideoService videoService;
+    @Resource
+    private VideoTypeService videoTypeService;
 
     @RequestMapping(value = "/listVideo",method = RequestMethod.GET)
     public String listVideo(HttpServletRequest request){
@@ -85,6 +89,24 @@ public class VideoController {
     public String videoDetail(HttpServletRequest request){
         try{
             String id = request.getParameter("id");
+            //获取视频详情之后，自动为该视频点击量加1
+            videoService.addVideoClickById(id);
+            VideoDTO videoDTO = videoService.queryVideoById(id);
+            request.setAttribute("video",videoDTO);
+            return "videoDetail";
+        }catch (Exception e){
+            logger.error("获取在线视频详情失败，原因：{}",e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value = "/addParises")
+    public String addParises(HttpServletRequest request){
+        try{
+            String id = request.getParameter("id");
+
+            videoService.addVideoParisesById(id);
+
             VideoDTO videoDTO = videoService.queryVideoById(id);
             request.setAttribute("video",videoDTO);
             return "videoDetail";
@@ -107,6 +129,44 @@ public class VideoController {
             return e.getMessage();
         }
     }
+
+    @RequestMapping(value = "listVideoByType")
+    public String listVideoByType(HttpServletRequest request){
+        try{
+            String id = request.getParameter("id");
+            if (id.equals("全部")){
+                List<TVideo> videos = videoService.listVideoByType(null);
+                request.setAttribute("videos",videos);
+                request.setAttribute("theme","全部");
+            }else {
+                List<TVideo> videos = videoService.listVideoByType(id);
+                request.setAttribute("videos", videos);
+                TVideoType videoType = videoTypeService.queryVideoTypeById(id);
+                request.setAttribute("theme", videoType.getVideoTypeName());
+            }
+            return "vsmPage";
+        }catch (Exception e){
+            logger.error("根据类型查询视频失败，原因{}",e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value = "queryVideoByTitle")
+    public String queryVideoByTitle(HttpServletRequest request){
+        try{
+            String title = request.getParameter("title");
+            System.out.println("==============="+title);
+            List<TVideo> videos = videoService.queryVideoByTitle(title);
+            request.setAttribute("videos",videos);
+            String theme = "对'"+ title +"'的搜索结果";
+            request.setAttribute("theme",theme);
+            return "vsmPage";
+        }catch (Exception e){
+            logger.error("根据类型查询视频失败，原因{}",e);
+            return e.getMessage();
+        }
+    }
+
 
 
 

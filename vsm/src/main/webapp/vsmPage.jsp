@@ -12,6 +12,18 @@
     <script src="//cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" language="JavaScript">
+        function searchenter(event) {
+            event = event || window.event;
+            var title = document.getElementById('title').value;
+            if (event.keyCode == 13) {
+                if (title == '') {
+                    return false;
+                }
+                window.location.href = "queryVideoByTitle?title="+title ;
+            }
+        }
+    </script>
 </head>
 <body>
 <%
@@ -19,7 +31,7 @@
     List<TVideo> bigPraisesVideo = (List<TVideo>)session.getAttribute("bigPraisesVideo");
     List<TVideoType> videoTypes = (List<TVideoType>)session.getAttribute("videoTypes");
     List<TVideo> videos = (List<TVideo>)request.getAttribute("videos");
-
+    String theme = (String) request.getAttribute("theme");
 %>
 <div class="header" style="background-color: #c71012;height: 15%">
     <div style="padding-top: 40px;padding-left: 50px">
@@ -40,16 +52,16 @@
     <div style="padding-top: 8px;padding-left: 16%;">
         <table cellpadding="0" cellspacing="0" style="font-size:15px;">
             <tr>
-                <th scope="col"><a href="">首页</a>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th scope="col"><a href="listVideoByType?id=全部">首页</a>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                 <%
                     for (TVideoType videoType : videoTypes) {
                 %>
-                <th scope="col"><a href=""><%=videoType.getVideoTypeName()%></>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                <th scope="col"><a href="listVideoByType?id=<%=videoType.getId()%>"><%=videoType.getVideoTypeName()%></>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                 <%
                     }
                 %>
                 <th scope="col">
-                    <input type="text" placeholder="请输入搜索标题" name="search" >
+                    <input type="text" placeholder="请输入搜索标题" name="title" id="title" onkeyup="searchenter(event);">
                 </th>
             </tr>
         </table>
@@ -75,7 +87,7 @@
                                 <a href="/videoDetail?id=<%=bigPraisesVideo.get(1).getId()%>"><img src="<%=bigPraisesVideo.get(1).getCoverUrl()%>" width="400px" height="265px"/></a>
                             </div>
                             <div class="item">
-                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(1).getId()%>"><img src="<%=bigPraisesVideo.get(1).getCoverUrl()%>" width="400px" height="265px"/></a>
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(2).getId()%>"><img src="<%=bigPraisesVideo.get(2).getCoverUrl()%>" width="400px" height="265px"/></a>
                             </div>
                         </div>
                         <!-- 轮播（Carousel）导航 -->
@@ -102,24 +114,26 @@
     </div>
     <br>
     <div style="padding-top: 4px;">
-        <p style="font-size: 20px ;margin-left: 16%;float: left">全部</p>
+        <p style="font-size: 20px ;margin-left: 16%;float: left"><%=theme%></p>
     </div>
     <br>
     <div style="margin-left: 15%;margin-top: 20px ; width: 70%; height: auto;">
         <table style="padding-top:25px">
             <tr>
-                <td style="padding-left: 12px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-            </tr>
-            <tr>
-                <td style="padding-left: 12px;padding-top: 10px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px;padding-top: 10px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px;padding-top: 10px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px;padding-top: 10px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
-                <td style="padding-left: 12px;padding-top: 10px"><img src="../cover/cover1.jpg" width="200px" height="125" /><br>标题</td>
+                <%
+                    for (int i = 0; i < videos.size(); i++) {
+                        if (i%5!=0){
+                %>
+                    <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=videos.get(i).getId()%>"><img src="<%=videos.get(i).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <%
+                    }else{
+                %>
+                    </tr><tr>
+                    <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=videos.get(i).getId()%>"><img src="<%=videos.get(i).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+            <%
+                    }
+                    }
+                %>
             </tr>
         </table>
     </div>

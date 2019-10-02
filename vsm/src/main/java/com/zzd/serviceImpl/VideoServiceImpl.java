@@ -36,18 +36,6 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public List<TVideo> listVideosByType(String type) {
-        TVideoExample example = new TVideoExample();
-        if (type.isEmpty()){
-            example.createCriteria().andStatusEqualTo((byte)1);
-        }else{
-            example.createCriteria().andStatusEqualTo((byte)1).andVideoTypeEqualTo(type);
-        }
-        List<TVideo> videos = videoMapper.selectByExample(example);
-        return videos;
-    }
-
-    @Override
     public int updateVideo(TVideo video, String loginName) {
         setVideoInfo(video,loginName);
         int result = videoMapper.updateByPrimaryKey(video);
@@ -67,6 +55,7 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     public List<TVideo> queryVideoByTitle(String title) {
+        title = "%"+title+"%";
         TVideoExample example = new TVideoExample();
         example.createCriteria().andVideoTitleLike(title);
         List<TVideo> videos = videoMapper.selectByExample(example);
@@ -122,7 +111,7 @@ public class VideoServiceImpl implements VideoService {
         if (type==null || type.length()==0){
             example.createCriteria().andStatusEqualTo((byte)1);
         }else {
-            example.createCriteria().andStatusEqualTo((byte)1).andVideoTypeEqualTo(videoTypeService.queryVideoTypeByName(type).getId());
+            example.createCriteria().andStatusEqualTo((byte)1).andVideoTypeEqualTo(type);
         }
         List<TVideo> videos = videoMapper.selectByExample(example);
         return videos;
@@ -146,6 +135,20 @@ public class VideoServiceImpl implements VideoService {
             videoDTOS.add(videoDTO);
         }
         return videoDTOS;
+    }
+
+    @Override
+    public void addVideoClickById(String id) {
+        TVideo video = videoMapper.selectByPrimaryKey(id);
+        video.setVideoClicks(video.getVideoClicks()+1);
+        videoMapper.updateByPrimaryKey(video);
+    }
+
+    @Override
+    public void addVideoParisesById(String id) {
+        TVideo video = videoMapper.selectByPrimaryKey(id);
+        video.setVideoPraises(video.getVideoPraises()+1);
+        videoMapper.updateByPrimaryKey(video);
     }
 
     private void setVideoInfo(TVideo video,String loginName){

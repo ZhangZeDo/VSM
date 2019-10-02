@@ -4,6 +4,7 @@ import com.zzd.dao.TReportRecordMapper;
 import com.zzd.model.*;
 import com.zzd.service.CommentService;
 import com.zzd.service.ReportRecordService;
+import com.zzd.service.VideoService;
 import com.zzd.service.ViolationRecordService;
 import com.zzd.utils.UniqueIdUtil;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,12 @@ import java.util.List;
 public class ReportRecordServiceImpl implements ReportRecordService {
     @Resource
     private TReportRecordMapper reportRecordMapper;
-
     @Resource
     private ViolationRecordService violationRecordService;
-
     @Resource
     private CommentService commentService;
+    @Resource
+    private VideoService videoService;
 
     @Override
     public List<TReportRecord> listReport() {
@@ -58,7 +59,8 @@ public class ReportRecordServiceImpl implements ReportRecordService {
             String remark = "";
             String userID = "";
             if (reportRecord.getReportType()==(byte)1){ //举报类型是视频，先获取到该视频用户id
-                //TODO 根据reportId查询用户id
+                TVideo video = videoService.queryVideoById(reportRecord.getReportId());
+                userID = video.getUserId();
                 remark = "用户"+userID+"的视频"+reportRecord.getReportId()+"违规";
             }else if (reportRecord.getReportType()==(byte)2){ //举报类型是评论，先获取到该评论用户id
                 TComment comment = commentService.queryCommentById(reportRecord.getReportId());
@@ -69,7 +71,6 @@ public class ReportRecordServiceImpl implements ReportRecordService {
             }
             violationRecord.setUserId(userID);
             violationRecord.setRemark(remark);
-
             //添加一条违规记录
             result = violationRecordService.addViolationRecord(violationRecord,loginName);
         }

@@ -56,6 +56,8 @@ public class UserController {
                 //显示首页视频
                 List<TVideo> videos = videoService.listVideoByType(null);
                 request.setAttribute("videos",videos);
+                request.setAttribute("theme","全部");
+
                 return "vsmPage";
             }else if (adminService.queryAdminByName(user.getUserName())!=null){
                 TAdmin admin = new TAdmin();

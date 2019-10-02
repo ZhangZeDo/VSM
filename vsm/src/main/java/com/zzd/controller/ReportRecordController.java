@@ -1,9 +1,11 @@
 package com.zzd.controller;
 
+import com.zzd.dto.VideoDTO;
 import com.zzd.model.TAdmin;
-import com.zzd.model.TComment;
 import com.zzd.model.TReportRecord;
+import com.zzd.model.TUser;
 import com.zzd.service.ReportRecordService;
+import com.zzd.service.VideoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,8 @@ public class ReportRecordController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private ReportRecordService reportRecordService;
+    @Resource
+    private VideoService videoService;
 
     @RequestMapping(value = "listReportRecord" ,method = RequestMethod.GET)
     public String listReport(HttpServletRequest request){
@@ -63,6 +67,32 @@ public class ReportRecordController {
             return "listReport";
         }catch (Exception e){
             logger.error("驳回该条举报记录失败，原因{}",e);
+            return e.getMessage();
+        }
+    }
+
+    @RequestMapping(value = "addReport",method = RequestMethod.POST)
+    public String addReport(HttpServletRequest request){
+        try {
+            HttpSession session = request.getSession();
+            TUser user = (TUser)session.getAttribute("User");
+
+            String remark = request.getParameter("remark");
+            String reportId = request.getParameter("reportId");
+            String reportType = request.getParameter("reportType");
+
+            TReportRecord reportRecord = new TReportRecord();
+            reportRecord.setUserId(user.getId());
+            reportRecord.setRemark(remark);
+            reportRecord.setReportType(Integer.valueOf(reportType));
+            reportRecord.setReportId(reportId);
+            reportRecordService.addReportRecord(reportRecord);
+
+            VideoDTO videoDTO = videoService.queryVideoById(reportId);
+            request.setAttribute("video",videoDTO);
+            return "videoDetail";
+        }catch (Exception e){
+            logger.error("用户举报失败，原因{}",e);
             return e.getMessage();
         }
     }
