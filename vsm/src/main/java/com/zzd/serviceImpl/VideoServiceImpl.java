@@ -1,14 +1,11 @@
 package com.zzd.serviceImpl;
 
+import com.zzd.dao.TUserMapper;
 import com.zzd.dao.TVideoMapper;
+import com.zzd.dto.CommentDTO;
 import com.zzd.dto.VideoDTO;
-import com.zzd.model.TRewardRecord;
-import com.zzd.model.TVideo;
-import com.zzd.model.TVideoExample;
-import com.zzd.model.TVideoType;
-import com.zzd.service.RewardRecordService;
-import com.zzd.service.VideoService;
-import com.zzd.service.VideoTypeService;
+import com.zzd.model.*;
+import com.zzd.service.*;
 import com.zzd.utils.UniqueIdUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -26,6 +23,10 @@ public class VideoServiceImpl implements VideoService {
     private VideoTypeService videoTypeService;
     @Resource
     private RewardRecordService rewardRecordService;
+    @Resource
+    private CommentService commentService;
+    @Resource
+    private TUserMapper userMapper;
 
     @Override
     public List<TVideo> listVideos() {
@@ -70,6 +71,18 @@ public class VideoServiceImpl implements VideoService {
         //设置视频类型名称
         TVideoType videoType = videoTypeService.queryVideoTypeById(video.getVideoType());
         videoDTO.setTypeName(videoType.getVideoTypeName());
+        //查找该视频的所有评论
+        List<TComment> comments = commentService.queryCommentByVideo(videoDTO.getId());
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        for (TComment comment : comments) {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment,commentDTO);
+            TUser user = userMapper.selectByPrimaryKey(comment.getUserId());
+            commentDTO.setUserName(user.getUserName());
+            commentDTOS.add(commentDTO);
+        }
+        videoDTO.setCommentList(commentDTOS);;
+
         return videoDTO;
     }
 

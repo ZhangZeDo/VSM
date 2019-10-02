@@ -1,6 +1,8 @@
 <%@ page import="com.zzd.dto.VideoDTO" %>
 <%@ page import="com.zzd.model.TVideo" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.zzd.model.TComment" %>
+<%@ page import="com.zzd.dto.CommentDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -81,24 +83,25 @@
         <div>
             <p style="font-size: 20px">评论</p>
             <div style="height: 15px">
-                <input type="text" placeholder="发表评论" style="width: 500px;height: 25px">
-                &nbsp;&nbsp;
-                <button type="button">发表</button>
+                <form action="/addComment" method="post">
+                    <input type="hidden" value="<%=video.getId()%>" name="id">
+                    <input type="text" name="comment" placeholder="发表评论" style="width: 500px;height: 25px">
+                    &nbsp;&nbsp;
+                    <button type="button" onclick="submit">发表</button>
+                </form>
             </div>
             <div style="margin-top:  20px">
                 <table>
-                    <tr style="padding-top: 5px;">
-                        <td>人名:</td>
-                        <td>评论的内容</td>
-                    </tr>
-                    <tr style="padding-top: 5px;">
-                        <td>人名:</td>
-                        <td>评论的内容</td>
-                    </tr>
-                    <tr style="padding-top: 5px;">
-                        <td>人名:</td>
-                        <td>评论的内容</td>
-                    </tr>
+                    <%
+                        for (CommentDTO comment : video.getCommentList()) {
+                    %>
+                        <tr style="padding-top: 5px;">
+                            <td style="float: left"><%=comment.getUserName()%>: </td>
+                            <td style="float: left"><%=comment.getComment()%></td>
+                        </tr>
+                    <%
+                        }
+                    %>
                 </table>
             </div>
 
