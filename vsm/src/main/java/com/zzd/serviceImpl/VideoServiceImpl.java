@@ -95,7 +95,7 @@ public class VideoServiceImpl implements VideoService {
         List<TVideo> list = new ArrayList<>();
         for (int i=0;i<videos.size();i++){
             list.add(videos.get(i));
-            if (i==3){
+            if (i==5){
                 break;
             }
         }

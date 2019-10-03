@@ -1,6 +1,7 @@
 <%@ page import="com.zzd.model.TVideoType" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.zzd.model.TVideo" %>
+<%@ page import="com.zzd.model.TUser" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -27,12 +28,21 @@
 </head>
 <body>
 <%
+    TUser user = (TUser)session.getAttribute("User");
     List<TVideo> bigClickVideo = (List<TVideo>)session.getAttribute("bigClickVideo");
     List<TVideo> bigPraisesVideo = (List<TVideo>)session.getAttribute("bigPraisesVideo");
     List<TVideoType> videoTypes = (List<TVideoType>)session.getAttribute("videoTypes");
     List<TVideo> videos = (List<TVideo>)request.getAttribute("videos");
     String theme = (String) request.getAttribute("theme");
 %>
+<script>
+    function openPerson(){
+        document.getElementById("win3").style.display="";
+    }
+    function closePerson(){
+        document.getElementById("win3").style.display="none";
+    }
+</script>
 <div class="header" style="background-color: #c71012;height: 15%">
     <div style="padding-top: 40px;padding-left: 50px">
         <p align="left" style="font-size: 25px">
@@ -41,8 +51,9 @@
         <div style="float: right;padding-right: 20px">
             <table>
                 <tr>
+                    <td style="padding-right: 15px">欢迎你: <%=user.getUserName()%> </td>
                     <td style="padding-right: 15px"><a href="/getMyVideos" style="color: #DEDEDE">我的视频</a></td>
-                    <td style="padding-right: 15px"><a href="userDetail.jsp" style="color: #DEDEDE">个人中心</a></td>
+                    <td style="padding-right: 15px"><a href="/loginOut" style="color: #DEDEDE">退出登录</a></td>
                 </tr>
             </table>
         </div>
@@ -81,13 +92,13 @@
                         <!-- 轮播（Carousel）项目 -->
                         <div class="carousel-inner">
                             <div class="item active">
-                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(0).getId()%>"><img src="<%=bigPraisesVideo.get(0).getCoverUrl()%>" width="400px" height="265px"/></a>
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(0).getId()%>"><img src="<%=bigPraisesVideo.get(0).getCoverUrl()%>" width="400px" height="300px"/></a>
                             </div>
                             <div class="item">
-                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(1).getId()%>"><img src="<%=bigPraisesVideo.get(1).getCoverUrl()%>" width="400px" height="265px"/></a>
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(1).getId()%>"><img src="<%=bigPraisesVideo.get(1).getCoverUrl()%>" width="400px" height="300px"/></a>
                             </div>
                             <div class="item">
-                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(2).getId()%>"><img src="<%=bigPraisesVideo.get(2).getCoverUrl()%>" width="400px" height="265px"/></a>
+                                <a href="/videoDetail?id=<%=bigPraisesVideo.get(2).getId()%>"><img src="<%=bigPraisesVideo.get(2).getCoverUrl()%>" width="400px" height="300px"/></a>
                             </div>
                         </div>
                         <!-- 轮播（Carousel）导航 -->
@@ -102,13 +113,13 @@
                     </div>
                 </td>
                 <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
-                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
-                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(1).getId()%>"><img src="<%=bigClickVideo.get(1).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(2).getId()%>"><img src="<%=bigClickVideo.get(2).getCoverUrl()%>" width="200px" height="125px" /></a></td>
             </tr>
             <tr>
-                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
-                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
-                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(0).getId()%>"><img src="<%=bigClickVideo.get(0).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(3).getId()%>"><img src="<%=bigClickVideo.get(3).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(4).getId()%>"><img src="<%=bigClickVideo.get(4).getCoverUrl()%>" width="200px" height="125px" /></a></td>
+                <td style="padding-left: 15px;padding-top: 15px"><a href="/videoDetail?id=<%=bigClickVideo.get(5).getId()%>"><img src="<%=bigClickVideo.get(5).getCoverUrl()%>" width="200px" height="125px" /></a></td>
             </tr>
         </table>
     </div>

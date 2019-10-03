@@ -118,7 +118,7 @@
                 %>
                     <tr style="padding-top: 5px">
                         <br>
-                        <img src="<%=tVideo.getCoverUrl()%>" width="300px" height="150" />
+                        <a href="/videoDetail?id=<%=tVideo.getId()%>"><img src="<%=tVideo.getCoverUrl()%>" width="300px" height="150" /></a>
                         <br><%=tVideo.getVideoTitle()%>
                     </td>
                 </tr>
